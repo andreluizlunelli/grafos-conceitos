@@ -132,7 +132,7 @@ public class Questao7 {
 		List<Cidade> e_3 = E_3();
 		apresentarSubItensE(e_1, "Item E_1) Cidades isoladas:", "Não existem cidades desconexas!");
 		apresentarSubItensE(e_2, "Item E_2) Cidades com entrada e sem saída:", "Não existem cidades sem saida!");
-		
+		apresentarSubItensE(e_3, "Item E_3) Cidades com saída sem haver entrada:", "Não existem cidades com saida sem entrada!");
 	}
 
 	private void apresentarSubItensE(List<Cidade> l, String titulo, String frase) {
@@ -144,8 +144,34 @@ public class Questao7 {
 	}
 
 	private List<Cidade> E_3() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Cidade> listaCidadesHaSaidaSemEntrada = new ArrayList<>();
+		for (int x = 0; x < matriz.length; x++) {
+			boolean temEntrada = false;
+			for (int i = 0; i < matriz.length; i++) {
+				byte kentrada = matriz[x][i];
+				if (kentrada == 1) {
+					temEntrada = true;
+					break;
+				}
+			}
+			if (temEntrada) {
+				boolean temSaida = false;
+				//ñ pode ter saida
+				for (int i = 0; i < matriz.length; i++) {
+					byte ksaida = matriz[i][x];
+					if (ksaida == 0) {
+						continue;
+					} else {
+						temSaida = true;
+						break;
+					}
+				}
+				if (!temSaida) {
+					listaCidadesHaSaidaSemEntrada.add(obterCidade((byte) x));
+				}
+			}
+		}
+		return listaCidadesHaSaidaSemEntrada;
 	}
 
 	private List<Cidade> E_2() {
