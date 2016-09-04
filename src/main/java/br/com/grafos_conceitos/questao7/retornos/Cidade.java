@@ -1,11 +1,11 @@
 package br.com.grafos_conceitos.questao7.retornos;
 
-public class RetornoItemA {
+public class Cidade {
 	byte saem = 0;
 	byte chegam = 0;
 	byte cidade = 0;
 	
-	public RetornoItemA(byte cidade, byte saem, byte chegam) {
+	public Cidade(byte cidade, byte saem, byte chegam) {
 		super();
 		this.cidade = cidade;
 		this.saem = saem;

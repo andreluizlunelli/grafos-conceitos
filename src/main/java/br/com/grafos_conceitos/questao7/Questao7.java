@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import br.com.grafos_conceitos.questao7.retornos.RetornoItemA;
+import br.com.grafos_conceitos.questao7.retornos.Cidade;
 
 /**
  * @author André Lunelli<to.lunelli@gmail.com>
@@ -22,12 +22,6 @@ public class Questao7 {
 	final byte totalLinha = 5;
 	final byte totalColuna = 5;
 	final byte[][] matriz = new byte[totalLinha][totalColuna];
-
-	public void inicio() {
-		inicializarValoresMatriz();
-		apresentar_A();
-		apresentar_B();
-	}
 
 	private void inicializarValoresMatriz() {
 		// LINHA 0
@@ -65,9 +59,21 @@ public class Questao7 {
 		matriz[4][3] = 1;
 		matriz[4][4] = 0;
 	}
+
+	public void inicio() {
+		inicializarValoresMatriz();
+		apresentar_A();
+		out("\n");
+		apresentar_B();
+		out("\n");
+		apresentar_C();
+		out("\n");
+		apresentar_D();
+		out("\n");
+	}
 	
 	public void apresentar_A() {
-		RetornoItemA saemChegam = detarminarQuantasEntradasSaemEQuantasChegamACidade((byte) 2);
+		Cidade saemChegam = detarminarQuantasEntradasSaemEQuantasChegamACidade((byte) 2);
 		if (saemChegam == null) {
 			return;
 		}
@@ -75,10 +81,35 @@ public class Questao7 {
 	}
 	
 	public void apresentar_B() {
-		out("Item B) da questão 7:\n"+determinarQualCidadesChegaOMaiorNumeroDeEstradas());
+		Cidade cidade = determinarQualCidadesChegaOMaiorNumeroDeEstradas();
+		if (cidade == null) {
+			return;
+		}
+		out("Item B) da questão 7:\n"+cidade);
 	}
 	
-	private RetornoItemA detarminarQuantasEntradasSaemEQuantasChegamACidade(final byte cidade) {
+	public void apresentar_C() {
+		List retorno = retornarLigacoesDeMaoDupla((byte) 3);
+		boolean isTodasMaoDupla = (boolean) retorno.get(0);
+		Cidade cidade= (Cidade) retorno.get(1);
+		if (isTodasMaoDupla) {
+			out("Todas as ligações são de mão dupla.");
+		} else {
+			out("Não são todas/nenhuma ligação de mão dupla.");
+		}
+		out(String.format("CIDADE: %d", cidade.getCidade()));		
+	}
+
+	private void apresentar_D() {
+		cidadesQuePossuemSaidasDiretasParaCidade((byte) 1);
+	}
+
+	private List<Cidade> cidadesQuePossuemSaidasDiretasParaCidade(byte b) {
+		
+		return null;
+	}
+
+	private Cidade detarminarQuantasEntradasSaemEQuantasChegamACidade(final byte cidade) {
 		if (cidade > matriz[0].length) {
 			out("Valor informado excede o limite de linhas da matriz: "+cidade);
 			return null;
@@ -95,17 +126,17 @@ public class Questao7 {
 		for (int i=0; i<matriz[cidade].length; i++) 
 			if (matriz[cidade][i] == 1) 
 				saem++;
-		return new RetornoItemA((byte) cidade, (byte) saem, (byte) chegam);
+		return new Cidade((byte) cidade, (byte) saem, (byte) chegam);
 	}
 	
-	private RetornoItemA determinarQualCidadesChegaOMaiorNumeroDeEstradas() {
-		List<RetornoItemA> itemA = new ArrayList<RetornoItemA>();
+	private Cidade determinarQualCidadesChegaOMaiorNumeroDeEstradas() {
+		List<Cidade> itemA = new ArrayList<Cidade>();
 		for (int i=1; i<matriz.length; i++) {
 			itemA.add(detarminarQuantasEntradasSaemEQuantasChegamACidade((byte) i));
 		}
-		itemA.sort(new Comparator<RetornoItemA>() {
+		itemA.sort(new Comparator<Cidade>() {
 			@Override
-			public int compare(RetornoItemA o1, RetornoItemA o2) {
+			public int compare(Cidade o1, Cidade o2) {
 				if (o1.getChegam() > o2.getChegam()) {
 					return 1;
 				} else if (o1.getChegam() < o2.getChegam()) {
@@ -116,6 +147,27 @@ public class Questao7 {
 			}
 		});
 		return itemA.get(itemA.size()-1); // pega o ultimo elemento da lista ordenada
+	}
+	
+	private List retornarLigacoesDeMaoDupla(final byte k) {		
+		for (int i = 0; i < matriz.length; i++) {
+			if (i == (int) k) { continue; }
+			byte valor1 = matriz[i][k];
+			byte valor2 = matriz[k][i];
+			if (valor1 == 1 && valor2 == 1) {
+				continue;
+			} else {
+				return formatarRetornoLigacaoMaoDupla(false, k);
+			}
+		}
+		return formatarRetornoLigacaoMaoDupla(true, k);
+	}
+	
+	private List formatarRetornoLigacaoMaoDupla(boolean isTodasMaoDupla, byte cidade) {
+		List<Object> cidadeMaisBoleano = new ArrayList<>();
+		cidadeMaisBoleano.add(isTodasMaoDupla);
+		cidadeMaisBoleano.add(detarminarQuantasEntradasSaemEQuantasChegamACidade(cidade));
+		return cidadeMaisBoleano;		
 	}
 	
 	private static void out(Object str) {
