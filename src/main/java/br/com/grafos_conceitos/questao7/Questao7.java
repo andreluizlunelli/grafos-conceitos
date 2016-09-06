@@ -87,6 +87,8 @@ public class Questao7 {
 		out("\n");
 		apresentar_E();
 		out("\n");
+		apresentar_F();
+		out("\n");
 	}
 
 	public void apresentar_A() {
@@ -231,6 +233,29 @@ public class Questao7 {
 			}
 		}
 		return listaCidadesDesconexas;
+	}
+
+	private void apresentar_F() {
+		boolean realizarRoteiro = realizarRoteiro(new int[]{2,1,4,3,0});
+		out("Item F) da questão 7:");
+		out("Roteiro: {2,1,4,3,0}");
+		out(realizarRoteiro ? "Verdadeiro" : "Falso");
+	}
+	
+	private boolean realizarRoteiro(int[] sequencia) {
+		int atual = 0;
+		int proxima = 0;
+		for (int i = 0; i < sequencia.length; i++) {
+			if (i == sequencia.length-1) {
+				break;
+			}
+			atual = sequencia[i];
+			proxima = sequencia[i+1];
+			if (matriz[atual][proxima] != 1) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private List<Cidade> cidadesQuePossuemSaidasDiretasParaCidade(byte k) {
